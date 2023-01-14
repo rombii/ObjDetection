@@ -9,17 +9,17 @@ while True:
     botRCrn = [None, None]
     _, frame = cap.read()
 
-    kernel = np.ones((5,5), np.float32)/25
+    kernel = np.ones((5,5), np.float32)/25  # Matrix 5x5 of 1 multiplied by 1/25
 
-    dst = cv2.filter2D(frame, -1, kernel)
+    dst = cv2.filter2D(frame, -1, kernel) # Adding gaussian blur kernel
 
     cv2.imshow("filtered", dst)
 
-    i_x = cv2.Sobel(dst, cv2.CV_64F, 1, 0)
+    i_x = cv2.Sobel(dst, cv2.CV_64F, 1, 0) # Getting x gradient of image (not sure)
 
-    
 
-    i_y = cv2.Sobel(dst, cv2.CV_64F, 0, 1)
+
+    i_y = cv2.Sobel(dst, cv2.CV_64F, 0, 1)  # Getting x gradient of image (not sure)
 
 
 
