@@ -1,10 +1,8 @@
-from operator import itemgetter
-
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture("assets\pilka1.mp4")
-result = cv2.VideoWriter('result.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, (int(640.0), int(480.0)))
+cap = cv2.VideoCapture("assets\moneta.mp4")
+result = cv2.VideoWriter('result_moneta.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, (int(640.0), int(480.0)))
 number = 0
 while True:
     topLCrn = [None, None]
@@ -13,6 +11,7 @@ while True:
 
     if ret == True:
         number += 1
+
         # GAUSSIAN BLUR
 
         # Gaussian blur kernel
@@ -33,8 +32,6 @@ while True:
         #  merging the filters
         sobel = frameSobelVert + frameSobelHor
 
-        # cv2.imshow("Frame", sobel)
-
         #  Edge direction
         theta = np.arctan2(frameSobelVert, frameSobelHor)
         #  convert to degrees in range -180 - 180
@@ -42,7 +39,7 @@ while True:
         #  convert range to 0 - 180
         theta[theta < 0] += 180
 
-        #  NON-MAXIMUM SUPPRESSION - too slow
+        #  NON-MAXIMUM SUPPRESSION
 
         #  image size
         w, h = sobel.shape[0], sobel.shape[1]
@@ -97,8 +94,6 @@ while True:
         afterThreshold[strong_i, strong_j] = strong
         afterThreshold[weak_i, weak_j] = weak
 
-        # cv2.imshow('thresh', res)
-
         # Applying Hysteresis
         for i in range(1, w - 1):
             for j in range(1, h - 1):
@@ -114,13 +109,12 @@ while True:
                         afterThreshold[i, j] = strong
                     else:
                         afterThreshold[i, j] = 0
-        result.write(np.int8(afterThreshold))
 
-        if cv2.waitKey(27) == 27:  # 27 - esc
-            break
         print("frame: " + str(number))
+        result.write(np.int8(afterThreshold))
     else:
         break
+
 result.release()
 cap.release()
 cv2.destroyAllWindows()
